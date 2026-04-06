@@ -20,7 +20,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #0a0a0a;           /* 纯黑色背景 */
+            background: #0a0a0a;
             font-family: 'Roboto', sans-serif;
             overflow: hidden;
             color: white;
@@ -28,59 +28,65 @@
 
         .clock-container {
             text-align: center;
-            padding: 20px;
+            padding: 20px 30px;
         }
 
         .eternity {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.65rem;
-            font-weight: 400;
+            font-size: 1.55rem;
             letter-spacing: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             opacity: 0.85;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
         #time {
             font-family: 'Orbitron', sans-serif;
-            font-size: 6.2rem;
+            font-size: 5.3rem;
             font-weight: 700;
             letter-spacing: 6px;
-            margin: 10px 0;
-            background: linear-gradient(90deg, #00f5ff, #00ff9d, #ffff00, #ff00ff);
+            margin: 8px 0 15px 0;
+            background: linear-gradient(90deg, #00f5ff, #39ff14, #ffff00, #ff00ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(0, 245, 255, 0.6);
+            text-shadow: 0 0 25px rgba(0, 245, 255, 0.5);
             line-height: 1;
         }
 
         #date {
-            font-size: 1.45rem;
+            font-size: 1.4rem;
             font-weight: 300;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             opacity: 0.9;
-            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .quote {
+            font-size: 1.05rem;
+            font-weight: 300;
+            opacity: 0.78;
+            min-height: 1.6em;
+            transition: opacity 0.8s ease;
         }
 
         .seconds {
-            font-size: 2.1rem;
+            font-size: 1.9rem;
             vertical-align: super;
-            margin-left: 8px;
+            margin-left: 6px;
             opacity: 0.9;
         }
 
-        /* 手机小屏适配 */
         @media (max-width: 480px) {
-            #time { font-size: 5.6rem; }
-            .eternity { font-size: 1.55rem; }
+            #time { font-size: 4.85rem; }
+            .eternity { font-size: 1.45rem; }
         }
     </style>
 </head>
 <body>
     <div class="clock-container">
         <div class="eternity">eternity</div>
-        <div id="time">21:00<span class="seconds">59</span></div>
-        <div id="date">2026-04-06 Monday</div>
+        <div id="time">09:32<span class="seconds">45</span></div>
+        <div id="date">2026-04-06 星期一</div>
+        <div class="quote" id="quote"></div>
     </div>
 
     <script>
@@ -97,18 +103,39 @@
             const year = now.getFullYear();
             const month = (now.getMonth() + 1).toString().padStart(2, '0');
             const day = now.getDate().toString().padStart(2, '0');
-            const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
             const weekday = weekdays[now.getDay()];
             
             document.getElementById('date').textContent = `${year}-${month}-${day} ${weekday}`;
         }
 
+        // 简洁语录库（可自行继续添加）
+        const quotes = [
+            "珍惜每一刻",
+            "时间即永恒",
+            "活在当下",
+            "此刻便是永远",
+            "时间温柔且残酷",
+            "每一秒都是礼物",
+            "永恒藏于瞬间",
+            "慢下来，感受时间"
+        ];
+
+        let currentIndex = 0;
+
+        function showNextQuote() {
+            const quoteEl = document.getElementById('quote');
+            quoteEl.style.opacity = 0;
+
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % quotes.length;
+                quoteEl.textContent = quotes[currentIndex];
+                quoteEl.style.opacity = 1;
+            }, 600);
+        }
+
+        // 初始化
         setInterval(updateClock, 1000);
         updateClock();
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
-    </script>
-</body>
-</html>
+        // 首次显示语录并每10
