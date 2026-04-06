@@ -33,7 +33,7 @@
 
         .eternity {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.55rem;
+            font-size: 1.5rem;
             letter-spacing: 8px;
             margin-bottom: 12px;
             opacity: 0.85;
@@ -41,10 +41,10 @@
 
         #time {
             font-family: 'Orbitron', sans-serif;
-            font-size: 5.3rem;
+            font-size: 4.6rem;           /* 再次调小 */
             font-weight: 700;
-            letter-spacing: 6px;
-            margin: 8px 0 15px 0;
+            letter-spacing: 5px;
+            margin: 8px 0 18px 0;
             background: linear-gradient(90deg, #00f5ff, #39ff14, #ffff00, #ff00ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -53,11 +53,11 @@
         }
 
         #date {
-            font-size: 1.4rem;
+            font-size: 1.38rem;
             font-weight: 300;
             letter-spacing: 2px;
             opacity: 0.9;
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
 
         .quote {
@@ -69,24 +69,29 @@
         }
 
         .seconds {
-            font-size: 1.9rem;
+            font-size: 1.85rem;
             vertical-align: super;
             margin-left: 6px;
             opacity: 0.9;
         }
 
+        /* 小屏手机额外适配 */
         @media (max-width: 480px) {
-            #time { font-size: 4.85rem; }
-            .eternity { font-size: 1.45rem; }
+            #time { 
+                font-size: 4.3rem;     /* 更小 */
+            }
+            .eternity { 
+                font-size: 1.4rem; 
+            }
         }
     </style>
 </head>
 <body>
     <div class="clock-container">
         <div class="eternity">eternity</div>
-        <div id="time">09:32<span class="seconds">45</span></div>
+        <div id="time">09:38<span class="seconds">30</span></div>
         <div id="date">2026-04-06 星期一</div>
-        <div class="quote" id="quote"></div>
+        <div class="quote" id="quote">珍惜每一刻</div>
     </div>
 
     <script>
@@ -109,16 +114,15 @@
             document.getElementById('date').textContent = `${year}-${month}-${day} ${weekday}`;
         }
 
-        // 简洁语录库（可自行继续添加）
         const quotes = [
             "珍惜每一刻",
             "时间即永恒",
             "活在当下",
             "此刻便是永远",
-            "时间温柔且残酷",
             "每一秒都是礼物",
             "永恒藏于瞬间",
-            "慢下来，感受时间"
+            "慢下来，感受时间",
+            "时间温柔且残酷"
         ];
 
         let currentIndex = 0;
@@ -134,8 +138,14 @@
             }, 600);
         }
 
-        // 初始化
         setInterval(updateClock, 1000);
         updateClock();
+        document.getElementById('quote').textContent = quotes[0];
+        setInterval(showNextQuote, 10000);
 
-        // 首次显示语录并每10
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
