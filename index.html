@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6a00b8">
+    <title>Eternity Clock</title>
+    
+    <!-- PWA 配置 -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon-192.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #2a0033, #6a00b8, #a200ff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .clock-container {
+            text-align: center;
+        }
+
+        .eternity {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 400;
+            letter-spacing: 8px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        #time {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9rem;
+            font-weight: 700;
+            letter-spacing: 10px;
+            margin: 10px 0;
+            background: linear-gradient(90deg, #ff0080, #00ffcc, #ffff00, #00ff80, #8000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+            line-height: 1;
+        }
+
+        #date {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            opacity: 0.85;
+            margin-top: 10px;
+        }
+
+        .seconds {
+            font-size: 2.5rem;
+            vertical-align: super;
+            margin-left: 12px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <div class="eternity">ETERNITY</div>
+        <div id="time">21:00<span class="seconds">59</span></div>
+        <div id="date">2026-04-06 Monday</div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            
+            // 时间
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('time').innerHTML = 
+                `${hours}:${minutes}<span class="seconds">${seconds}</span>`;
+            
+            // 日期
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const weekday = weekdays[now.getDay()];
+            
+            document.getElementById('date').textContent = `${year}-${month}-${day} ${weekday}`;
+        }
+
+        // 每秒更新
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 注册 Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
